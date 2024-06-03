@@ -1,16 +1,17 @@
 #!/usr/bin/env node
-import React from 'react';
-import {render} from 'ink';
+// import React from 'react';
+// import { render } from 'ink';
 import meow from 'meow';
-import App from './app.js';
+// import App from './app.js';
 
 const cli = meow(
 	`
 	Usage
 	  $ cli-alt
 
-	Options
-		--name  Your name
+	Commands
+	  total-cost calculate total cost
+	  best-deal find the best deal
 
 	Examples
 	  $ cli-alt --name=Jane
@@ -18,7 +19,10 @@ const cli = meow(
 `,
 	{
 		importMeta: import.meta,
+		autoHelp: true,
 		flags: {
+
+
 			name: {
 				type: 'string',
 			},
@@ -26,4 +30,14 @@ const cli = meow(
 	},
 );
 
-render(<App name={cli.flags.name} />);
+// const safeFlags = Object.fromEntries(
+// 	Object.entries(cli.flags).map(([key, value]) => [key, String(value)])
+// );
+
+switch (cli.input[0]) {
+	case 'total-cost':
+		await import('./commands/total-cost/index.js')
+		break;
+	default:
+		cli.showHelp(0)
+}
